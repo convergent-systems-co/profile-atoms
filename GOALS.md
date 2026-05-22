@@ -2,6 +2,8 @@
 
 > User/agent profile compositions — durable working-identity declarations for the Olympus broker. Each profile composes role-packs, policies, governance, defaults, identities, channels, knowledge, and workflows into a coherent posture.
 
+> **Implementation status:** scaffold complete. v1.0.0 design at `docs/design/profile-atoms-v1.0.0.md` — build-out tracked in #3.
+
 ## What this catalog makes civilization-grade
 
 Every AI agent / runtime reinvents "what is this user authorized to do." The mapping of (user → role → vocabulary → tools → constraints → governance) lives buried in code, scattered across config files, or hardcoded into product surfaces. Switching roles means rebuilding the surface. Onboarding a new hire means re-deriving the configuration. Compliance regimes can't be applied compositionally — they're baked in.
