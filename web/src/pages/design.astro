@@ -1,0 +1,14 @@
+---
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { marked } from "marked";
+import Base from "../layouts/Base.astro";
+
+// import.meta.env.BASE_URL is not useful here; resolve from the project root (cwd at build time).
+// During `astro build`, process.cwd() is the web/ directory.
+const designMd = await readFile(resolve(process.cwd(), "public/docs/design.md"), "utf-8");
+const html = marked.parse(designMd);
+---
+<Base title="Design" description="profile-atoms v1.0.0 design specification.">
+  <article class="markdown" set:html={html}></article>
+</Base>
