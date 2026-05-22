@@ -1,0 +1,33 @@
+# ATOMS.yml — catalog manifest for profile-atoms
+#
+# See https://github.com/convergent-systems-co/atoms-spec for the canonical schema this conforms to.
+
+name: profile-atoms
+version: 0.1.0
+spec: atoms-spec/v1
+domain: profile-atoms.com
+ecosystem:
+  federation: xdao.co
+  redirect: profile.xdao.co
+
+purpose: |
+  User/agent profile compositions — durable "working-identity" declarations for the Olympus broker. Each profile composes role-packs, policy stack, governance stack, default persona/theme/budget, available identities/channels, knowledge sources, and default workflows into a coherent posture. Catalog is composition-only; primitive atoms live in other catalogs.
+
+# profile-atoms catalogs only compositions; there are no primitive atoms.
+atomTypes: []
+
+compositionType: profile
+compositionDir: profiles
+
+ruleTypes:
+  - reference-trust
+  - update-policy
+  - inheritance-cycle
+
+runtimeConsumers:
+  - olympus
+
+license: Apache-2.0
+maintainers:
+  - name: Convergent Systems
+    contact: maintainers@xdao.co

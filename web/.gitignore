@@ -1,0 +1,8 @@
+.astro/
+.wrangler/
+dist/
+node_modules/
+public/profiles/
+public/schemas/
+public/exports/
+public/docs/

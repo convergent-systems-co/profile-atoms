@@ -1,0 +1,15 @@
+---
+import Base from "../../layouts/Base.astro";
+import ProfileCard from "../../components/ProfileCard.astro";
+import catalog from "../../../public/exports/catalog.json";
+
+const profiles = catalog.compositions.slice().sort((a: any, b: any) => a.canonical_name.localeCompare(b.canonical_name));
+---
+<Base title="Profiles" description="Every profile in the catalog.">
+  <h1>Profiles</h1>
+  <p>{profiles.length} illustrative profile{profiles.length === 1 ? "" : "s"}.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr)); gap: 1rem; margin-top: 2rem;">
+    {profiles.map((p: any) => <ProfileCard profile={p} />)}
+  </div>
+</Base>

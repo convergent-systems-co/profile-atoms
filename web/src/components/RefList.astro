@@ -1,0 +1,19 @@
+---
+const { items, label, priorityOrdered } = Astro.props;
+---
+{items && items.length > 0 && (
+  <section style="margin-bottom: 1.5rem;">
+    <h3 style="margin-bottom: 0.5rem;">{label}</h3>
+    <ol style={`list-style-type: ${priorityOrdered ? "decimal" : "none"}; padding-left: ${priorityOrdered ? "1.5rem" : "0"};`}>
+      {items.map((item: any) => (
+        <li style="margin-bottom: 0.5rem; font-family: ui-monospace, monospace; font-size: 0.875rem;">
+          <code>{item.ref}</code>
+          <span style="color: var(--muted);"> @ {item.version}</span>
+          {item.priority !== undefined && (
+            <span style="color: var(--muted); margin-left: 0.5rem;">(priority {item.priority})</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}

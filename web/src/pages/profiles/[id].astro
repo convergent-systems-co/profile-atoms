@@ -1,0 +1,93 @@
+---
+import Base from "../../layouts/Base.astro";
+import RefList from "../../components/RefList.astro";
+import catalog from "../../../public/exports/catalog.json";
+
+export function getStaticPaths() {
+  return catalog.compositions.map((profile: any) => ({
+    params: { id: profile.canonical_name.replace(/\//g, "-") },
+    props: { profile },
+  }));
+}
+
+const { profile } = Astro.props;
+const budget = profile.default_budget;
+const updatePolicy = profile.update_policy;
+const trust = profile.trust_requirements ?? {};
+---
+<Base title={profile.canonical_name} description={profile.description}>
+  <p><a href="/profiles/">← All profiles</a></p>
+  <h1 style="font-family: ui-monospace, monospace; word-break: break-all;">{profile.canonical_name}</h1>
+  <p style="color: var(--muted);">
+    <code>profile</code> · <code>v{profile.version}</code> · authored by <code>{profile.authored_by}</code>
+  </p>
+
+  <p>{profile.description}</p>
+
+  <section style="margin-top: 2rem;">
+    <h2>Defaults</h2>
+    <dl style="display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1rem;">
+      <dt>Persona</dt><dd><code>{profile.default_persona.ref}</code> <span style="color: var(--muted);">@ {profile.default_persona.version}</span></dd>
+      <dt>Theme</dt><dd><code>{profile.default_theme.ref}</code> <span style="color: var(--muted);">@ {profile.default_theme.version}</span></dd>
+      <dt>Budget (per action)</dt><dd>{budget.per_action} drachma</dd>
+      <dt>Budget (per session)</dt><dd>{budget.per_session} drachma</dd>
+      <dt>Budget (per day)</dt><dd>{budget.per_day} drachma</dd>
+      <dt>On cap hit</dt><dd><code>{budget.on_cap_hit}</code></dd>
+    </dl>
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Composition</h2>
+    <RefList items={profile.role_packs} label="Role-packs (priority-ordered)" priorityOrdered={true} />
+    <RefList items={profile.policy_stack} label="Policy stack (intersection)" />
+    <RefList items={profile.governance_stack} label="Governance stack (union of strictest)" />
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Availability sets</h2>
+    <RefList items={profile.available_identities} label="Available identities" />
+    <RefList items={profile.available_channels} label="Available channels" />
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Grounding</h2>
+    <RefList items={profile.knowledge_sources} label="Knowledge sources" />
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Discovery</h2>
+    <RefList items={profile.default_workflows} label="Default workflows" />
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Lifecycle &amp; trust</h2>
+    <dl style="display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1rem;">
+      <dt>Auto-upgrade</dt><dd>{updatePolicy.auto_upgrade ? "yes" : "no"}</dd>
+      <dt>Notification</dt><dd>{updatePolicy.notification ? "yes" : "no"}</dd>
+      <dt>Diff visualization</dt><dd><code>{updatePolicy.diff_visualization}</code></dd>
+    </dl>
+    {Object.keys(trust).length > 0 && (
+      <>
+        <h3>Trust requirements</h3>
+        <dl style="display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1rem;">
+          {Object.entries(trust).map(([key, val]: [string, any]) => (
+            <>
+              <dt><code>{key}</code></dt>
+              <dd>
+                {val.must_be_signed_by && <><span>must be signed by </span><code>{val.must_be_signed_by}</code></>}
+                {val.must_be_signed_by_any_of && (
+                  <><span>signed by any of </span>{val.must_be_signed_by_any_of.map((k: string) => <code style="margin-right: 0.25rem;">{k}</code>)}</>
+                )}
+              </dd>
+            </>
+          ))}
+        </dl>
+      </>
+    )}
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>Raw</h2>
+    <p><a href={`/profiles/${profile.canonical_name.replace(/\//g, "-")}.json`}>/profiles/{profile.canonical_name.replace(/\//g, "-")}.json</a> · <a href="/schemas/profile-atom-v1.json">schema</a></p>
+  </section>
+</Base>

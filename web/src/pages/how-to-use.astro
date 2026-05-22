@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="How to use" description="How AI agents and the Olympus broker consume profile-atoms.">
+  <h1>How to use profile-atoms</h1>
+
+  <h2>The catalog</h2>
+  <pre><code>curl https://profile-atoms.com/exports/catalog.json
+curl https://profile-atoms.com/profiles/jmfamily-profiles-developer.json
+curl https://profile-atoms.com/schemas/profile-atom-v1.json</code></pre>
+
+  <h2>Schema</h2>
+  <p>Every profile validates against <a href="/schemas/profile-atom-v1.json"><code>/schemas/profile-atom-v1.json</code></a> (Draft 2020-12).
+  The schema is the contract; the on-disk serialization is JSON, but other forms (YAML, TOML) are equivalent representations.</p>
+
+  <h2>Required fields</h2>
+  <ul>
+    <li><code>schema</code> — const reference to this catalog's schema URL.</li>
+    <li><code>canonical_name</code> — <code>&lt;namespace&gt;/profiles/&lt;slug&gt;</code> globally-unique identifier.</li>
+    <li><code>version</code> — semver.</li>
+    <li><code>authored_by</code> — signing key identifier.</li>
+    <li><code>description</code> — human-readable description (≤ 1000 chars).</li>
+    <li><code>role_packs</code> — ordered array of <code>{`{ref, version, priority}`}</code>. At least one required.</li>
+    <li><code>default_persona</code>, <code>default_theme</code> — refs to atoms in <code>persona-atoms</code> / <code>theme-atoms</code>.</li>
+    <li><code>default_budget</code> — <code>{`{per_action, per_session, per_day, on_cap_hit}`}</code>; on_cap_hit ∈ {"{warn, require_confirm, deny}"}.</li>
+    <li><code>available_identities</code> — set of refs (at least one); contexts pick from this set.</li>
+    <li><code>update_policy</code> — <code>{`{auto_upgrade, notification, diff_visualization}`}</code>; diff_visualization ∈ {"{required, optional, none}"}.</li>
+    <li><code>trust_requirements</code> — per-atom-type signing gates.</li>
+  </ul>
+
+  <h2>Optional fields</h2>
+  <ul>
+    <li><code>signed_by</code> — additional endorsement signatures.</li>
+    <li><code>policy_stack</code>, <code>governance_stack</code>, <code>available_channels</code>, <code>knowledge_sources</code>, <code>default_workflows</code> — sets that may be empty.</li>
+    <li><code>extends</code> — parent profile reference (single-level or chained).</li>
+  </ul>
+
+  <h2>Reference shape</h2>
+  <p>All cross-catalog references use:</p>
+  <pre><code>{`{ "ref": "<namespace>/<type>/<slug>", "version": "<semver>" }`}</code></pre>
+  <p>The <code>role_packs</code> array additionally carries a <code>priority</code> (integer, lower = higher priority) to break vocabulary collisions.</p>
+
+  <h2>Composition semantics</h2>
+  <p>How a profile's referenced atoms combine at activation (see <a href="/design/">design doc</a> for the full model):</p>
+  <ul>
+    <li><strong>Vocabulary</strong> (role-packs) — all in scope; priority breaks ties.</li>
+    <li><strong>Policies</strong> — intersection; every policy must approve.</li>
+    <li><strong>Governance</strong> — union of strictest requirements.</li>
+    <li><strong>Persona / theme / budget</strong> — defaults; session-scoped overrides allowed where the policy stack permits.</li>
+    <li><strong>Identities / channels</strong> — situational contexts pick subsets from the profile's set; cannot exceed.</li>
+  </ul>
+
+  <h2>What's NOT in a profile</h2>
+  <p>Not the secrets engine state. Not the cache. Not the transcript history. Not the active model. Not LLM provider credentials.
+  Not the active identity or active channels (those live on the situational context). Not session state. See <a href="/design/">design</a> for the full boundary.</p>
+
+  <h2>Caching</h2>
+  <p>The catalog is cached for 60s at the edge. Individual profile files for 5 minutes. The schema for 1 hour. CORS is open.</p>
+</Base>

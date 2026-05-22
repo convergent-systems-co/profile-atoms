@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import ProfileCard from "../components/ProfileCard.astro";
+import catalog from "../../public/exports/catalog.json";
+
+const profiles = catalog.compositions;
+---
+<Base title="Home" description="User/agent profile compositions for the Olympus broker.">
+  <h1>profile-atoms</h1>
+  <p style="font-size: 1.125rem; color: var(--muted); max-width: 48rem;">
+    The catalog of <strong>profile compositions</strong> — durable, signed declarations that establish a user's working identity in the
+    <a href="https://github.com/convergent-systems-co/olympus">Olympus</a> broker. Each profile composes role-packs (vocabulary), a policy stack (rules),
+    a governance stack (signing/audit), defaults (persona, theme, budget), availability sets (identities, channels),
+    knowledge sources, and default workflows.
+  </p>
+
+  <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; padding: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem;">
+    <div>
+      <div style="font-size: 2rem; font-weight: 600; line-height: 1;">{profiles.length}</div>
+      <div style="color: var(--muted); font-size: 0.875rem;">illustrative profiles</div>
+    </div>
+    <div>
+      <div style="font-size: 2rem; font-weight: 600; line-height: 1;">v{catalog.version}</div>
+      <div style="color: var(--muted); font-size: 0.875rem;">catalog version</div>
+    </div>
+    <div>
+      <div style="font-size: 2rem; font-weight: 600; line-height: 1;">v1.0.0</div>
+      <div style="color: var(--muted); font-size: 0.875rem;"><a href="/design/">design</a></div>
+    </div>
+  </section>
+
+  <h2>Profile vs Situational Context</h2>
+  <p>
+    Profile and situational context are <strong>parallel inputs</strong> to the broker, not hierarchical layers.
+    A profile is <em>who I am</em> (durable). A situational context is <em>what I'm doing</em> (session-scoped).
+    Neither contains the other. See the <a href="/design/">design doc</a> for the architectural model.
+  </p>
+
+  <h2>Profiles</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr)); gap: 1rem; margin-top: 1rem;">
+    {profiles.map((p: any) => <ProfileCard profile={p} />)}
+  </div>
+
+  <h2 style="margin-top: 3rem;">For AI agents</h2>
+  <p>
+    Fetch <a href="/exports/catalog.json"><code>/exports/catalog.json</code></a> for the full machine-readable catalog.
+    Each profile is also reachable at <code>/profiles/&lt;namespace-slug&gt;.json</code>.
+    See <a href="/how-to-use/">how-to-use</a> for the JSON shape and field semantics.
+  </p>
+</Base>

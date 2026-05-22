@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://profile-atoms.com/schemas/profile-atom-v1.json",
+  "title": "profile-atoms v1 profile",
+  "description": "A profile is the durable composition a user activates to establish their working identity in the Olympus broker. Composes role-packs + policy stack + governance stack + defaults + availability sets + grounding sources.",
+  "type": "object",
+  "required": [
+    "schema",
+    "canonical_name",
+    "version",
+    "authored_by",
+    "description",
+    "role_packs",
+    "default_persona",
+    "default_theme",
+    "default_budget",
+    "available_identities",
+    "update_policy",
+    "trust_requirements"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "https://profile-atoms.com/schemas/profile-atom-v1.json"
+    },
+    "canonical_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*(?:/[a-z0-9-]+)*/profiles/[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$",
+      "description": "Fully-qualified atom name in <namespace>/profiles/<slug> form."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$"
+    },
+    "authored_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Signing key identifier."
+    },
+    "signed_by": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Additional endorsement signatures."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "role_packs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["ref", "version", "priority"],
+        "additionalProperties": false,
+        "properties": {
+          "ref":      { "type": "string", "minLength": 1 },
+          "version":  { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$" },
+          "priority": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "description": "Ordered by priority (lower = higher priority)."
+    },
+    "policy_stack": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "description": "Intersection: every policy must approve."
+    },
+    "governance_stack": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ref" },
+      "description": "Union of strictest requirements."
+    },
+    "default_persona":  { "$ref": "#/$defs/ref" },
+    "default_theme":    { "$ref": "#/$defs/ref" },
+    "default_budget": {
+      "type": "object",
+      "required": ["per_action", "per_session", "per_day", "on_cap_hit"],
+      "additionalProperties": false,
+      "properties": {
+        "per_action":  { "type": "number", "minimum": 0 },
+        "per_session": { "type": "number", "minimum": 0 },
+        "per_day":     { "type": "number", "minimum": 0 },
+        "on_cap_hit":  { "type": "string", "enum": ["warn", "require_confirm", "deny"] }
+      }
+    },
+    "available_identities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ref" }
+    },
+    "available_channels": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ref" }
+    },
+    "knowledge_sources": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ref" }
+    },
+    "default_workflows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ref" }
+    },
+    "update_policy": {
+      "type": "object",
+      "required": ["auto_upgrade", "notification", "diff_visualization"],
+      "additionalProperties": false,
+      "properties": {
+        "auto_upgrade":        { "type": "boolean" },
+        "notification":        { "type": "boolean" },
+        "diff_visualization":  { "type": "string", "enum": ["required", "optional", "none"] }
+      }
+    },
+    "trust_requirements": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["must_be_signed_by"],
+            "additionalProperties": false,
+            "properties": {
+              "must_be_signed_by": { "type": "string", "minLength": 1 }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["must_be_signed_by_any_of"],
+            "additionalProperties": false,
+            "properties": {
+              "must_be_signed_by_any_of": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        ]
+      },
+      "description": "Per-atom-type trust gates. Keys: role_packs, policies, governance, identities, channels, knowledge, workflows, persona, theme. Values: signing requirements."
+    },
+    "extends": {
+      "$ref": "#/$defs/ref",
+      "description": "Optional parent profile."
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "required": ["ref", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "ref":     { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$" }
+      }
+    }
+  }
+}
