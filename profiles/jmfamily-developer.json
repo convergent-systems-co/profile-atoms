@@ -1,0 +1,65 @@
+{
+  "schema": "https://profile-atoms.com/schemas/profile-atom-v1.json",
+  "canonical_name": "jmfamily/profiles/developer",
+  "version": "1.0.0",
+  "authored_by": "jmfamily-signing-key",
+  "description": "JM Family developer working on Python services with corporate engineering standards, SOX compliance, and TDD discipline. Illustrative profile from the v1.0.0 design — references to atoms in other catalogs are placeholders until those catalogs are populated.",
+  "role_packs": [
+    { "ref": "convergent-systems/role-packs/clean-code",      "version": "2.1.0", "priority": 1 },
+    { "ref": "convergent-systems/role-packs/python-senior",   "version": "3.0.0", "priority": 2 },
+    { "ref": "convergent-systems/role-packs/documentation",   "version": "1.4.0", "priority": 3 },
+    { "ref": "convergent-systems/role-packs/tdd-test-writer", "version": "2.0.0", "priority": 4 }
+  ],
+  "policy_stack": [
+    { "ref": "jmfamily/policies/code-style-floor",      "version": "1.0.0" },
+    { "ref": "jmfamily/policies/secret-handling",       "version": "2.0.0" },
+    { "ref": "jmfamily/policies/dependency-vetting",    "version": "1.0.0" },
+    { "ref": "olympus/policies/no-curl-pipe-sh",        "version": "1.0.0" }
+  ],
+  "governance_stack": [
+    { "ref": "jmfamily/governance/engineering-standards", "version": "2.0.0" },
+    { "ref": "jmfamily/governance/sox-compliance",        "version": "1.0.0" }
+  ],
+  "default_persona": { "ref": "convergent-systems/personas/peer-programmer", "version": "2.0.0" },
+  "default_theme":   { "ref": "jmfamily/themes/developer-light",             "version": "1.0.0" },
+  "default_budget": {
+    "per_action":  0.5,
+    "per_session": 50,
+    "per_day":     200,
+    "on_cap_hit":  "warn"
+  },
+  "available_identities": [
+    { "ref": "jmfamily/identities/developer-github",      "version": "1.0.0" },
+    { "ref": "jmfamily/identities/developer-bitbucket",   "version": "1.0.0" },
+    { "ref": "jmfamily/identities/personal-experiments",  "version": "1.0.0" }
+  ],
+  "available_channels": [
+    { "ref": "jmfamily/channels/internal-package-registry", "version": "1.0.0" },
+    { "ref": "jmfamily/channels/github-enterprise",         "version": "1.0.0" },
+    { "ref": "convergent-systems/channels/anthropic-api",   "version": "1.0.0" },
+    { "ref": "convergent-systems/channels/openai-api",      "version": "1.0.0" },
+    { "ref": "olympus/channels/ollama-local",               "version": "1.0.0" }
+  ],
+  "knowledge_sources": [
+    { "ref": "jmfamily/knowledge/internal-libraries",        "version": "2.0.0" },
+    { "ref": "jmfamily/knowledge/architecture-decisions",    "version": "1.0.0" },
+    { "ref": "jmfamily/knowledge/style-guide",               "version": "3.0.0" },
+    { "ref": "convergent-systems/knowledge/python-stdlib",   "version": "1.0.0" }
+  ],
+  "default_workflows": [
+    { "ref": "jmfamily/workflows/new-service-scaffold", "version": "2.0.0" },
+    { "ref": "jmfamily/workflows/refactor-with-tests",  "version": "1.0.0" },
+    { "ref": "jmfamily/workflows/dependency-upgrade",   "version": "1.0.0" }
+  ],
+  "update_policy": {
+    "auto_upgrade":       false,
+    "notification":       true,
+    "diff_visualization": "required"
+  },
+  "trust_requirements": {
+    "role_packs":  { "must_be_signed_by_any_of": ["convergent-systems-key", "olympus-official-key"] },
+    "policies":    { "must_be_signed_by_any_of": ["jmfamily-signing-key", "olympus-official-key"] },
+    "governance":  { "must_be_signed_by": "jmfamily-signing-key" },
+    "identities":  { "must_be_signed_by": "jmfamily-signing-key" }
+  }
+}
