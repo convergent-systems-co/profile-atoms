@@ -103,6 +103,17 @@ output "custom_domain" {
 # Existing resources created out-of-band (wrangler, dashboard, or direct API
 # calls during the 2026-05-23 token-split rollout). Import them into state so
 # terraform manages them going forward without destroy-and-create.
+#
+# Import-ID format references (verified against provider source):
+#   - cloudflare_pages_project:  <account_id>/<project_name>
+#   - cloudflare_pages_domain:   <account_id>/<project_name>/<domain_name>
+#     (domain NAME, not UUID — see provider source
+#      internal/services/pages_domain/resource.go ImportState)
+#   - cloudflare_dns_record:     <zone_id>/<record_id>
+#
+# The CNAME at the apex was created via direct Cloudflare API call after the
+# token-split blocker was resolved on 2026-05-23. Record ID looked up via
+# GET /zones/{zone_id}/dns_records?type=CNAME&name=profile-atoms.com.
 
 import {
   to = cloudflare_pages_project.this
@@ -111,5 +122,10 @@ import {
 
 import {
   to = cloudflare_pages_domain.custom
-  id = "e1fe0f0ce8ff18da4edc118372c30022/profile-atoms/c45ea52f-bcee-4acd-8fe4-e710b2ab4396"
+  id = "e1fe0f0ce8ff18da4edc118372c30022/profile-atoms/profile-atoms.com"
+}
+
+import {
+  to = cloudflare_dns_record.pages_cname
+  id = "dac09240892ddce7b61f3779ff8f3925/073473cecfe59f9da2cc4aed255ef76f"
 }
