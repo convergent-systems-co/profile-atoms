@@ -9,17 +9,19 @@ terraform {
 }
 
 # CLOUDFLARE_API_TOKEN from env, never in code. See ~/.ai/Common.md §4.
-# Required token scopes:
+# Token scopes required for this module (mirrors the core-infra token
+# decomposition at convergent-systems-co/core-infra/terraform/cloudflare/*):
+#
 #   - Account → Cloudflare Pages → Edit
-#   - Zone → DNS → Edit (for the profile-atoms.com zone) — NOT YET GRANTED
+#       (created by terraform/cloudflare/account-token in core-infra)
+#   - Zone → DNS → Edit  on the profile-atoms.com zone
+#       (created by terraform/cloudflare/dns-token in core-infra)
+#
+# The intended operator workflow is: apply core-infra's token modules
+# once, capture the value into the org secret store, then export that
+# value as CLOUDFLARE_API_TOKEN before running this module.
 provider "cloudflare" {}
 
-# NOTE: the profile-atoms Cloudflare Pages project was created out-of-band
-# (before terraform was wired). Apex domain attachment + DNS were added
-# via direct API call on 2026-05-23 for the .com domain attachment;
-# the matching CNAME record is BLOCKED until the env-file token gains
-# Zone → DNS → Edit scope on the profile-atoms.com zone. See parent
-# atoms repo summary for the morning fix-up checklist.
 module "pages_project" {
   source = "git::https://github.com/convergent-systems-co/core-infra.git//terraform/cloudflare/pages-project?ref=v0.1.0"
 
