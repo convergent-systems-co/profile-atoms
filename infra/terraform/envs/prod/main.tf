@@ -3,44 +3,53 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
 
-# CLOUDFLARE_API_TOKEN must be exported in the runner's environment.
+# CLOUDFLARE_API_TOKEN from env, never in code. See ~/.ai/Common.md §4.
+# Required token scopes:
+#   - Account → Cloudflare Pages → Edit
+#   - Zone → DNS → Edit (for the profile-atoms.com zone) — NOT YET GRANTED
 provider "cloudflare" {}
 
-variable "account_id" {
-  type        = string
-  description = "Cloudflare account ID."
+# NOTE: the profile-atoms Cloudflare Pages project was created out-of-band
+# (before terraform was wired). Apex domain attachment + DNS were added
+# via direct API call on 2026-05-23 for the .com domain attachment;
+# the matching CNAME record is BLOCKED until the env-file token gains
+# Zone → DNS → Edit scope on the profile-atoms.com zone. See parent
+# atoms repo summary for the morning fix-up checklist.
+module "pages_project" {
+  source = "git::https://github.com/convergent-systems-co/core-infra.git//terraform/cloudflare/pages-project?ref=v0.1.0"
+
+  cloudflare_account_id = var.cloudflare_account_id
+  project_name          = "profile-atoms"
+  production_branch     = "main"
+  custom_domain         = "profile-atoms.com"
+  zone_id               = var.zone_id
 }
 
-variable "project_name" {
+variable "cloudflare_account_id" {
+  description = "Cloudflare account ID that owns the Pages project."
   type        = string
-  description = "Cloudflare Pages project name."
 }
 
-variable "production_branch" {
+variable "zone_id" {
+  description = "Cloudflare zone ID for profile-atoms.com."
   type        = string
-  default     = "main"
-  description = "Branch that Cloudflare Pages treats as production."
 }
 
-# Replace with the real GitHub repo coordinates during bootstrap.
-resource "cloudflare_pages_project" "site" {
-  account_id        = var.account_id
-  name              = var.project_name
-  production_branch = var.production_branch
-
-  build_config {
-    build_command   = "npm run build"
-    destination_dir = "dist"
-    root_dir        = "web/site"
-  }
+output "project_name" {
+  value = module.pages_project.project_name
 }
 
 output "subdomain" {
-  value       = cloudflare_pages_project.site.subdomain
+  value       = module.pages_project.subdomain
   description = "Default *.pages.dev hostname for the project."
+}
+
+output "custom_domain" {
+  value       = module.pages_project.custom_domain
+  description = "Custom hostname attached to the Pages project."
 }
