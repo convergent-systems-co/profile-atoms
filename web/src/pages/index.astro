@@ -4,10 +4,17 @@ import ProfileCard from "../components/ProfileCard.astro";
 import catalog from "../../public/exports/catalog.json";
 
 const profiles = catalog.compositions;
+const title = "PROFILE-Atoms";
+const tagline = "User/agent profile compositions for the Olympus broker.";
 ---
-<Base title="Home" description="User/agent profile compositions for the Olympus broker.">
-  <h1>profile-atoms</h1>
-  <p style="font-size: 1.125rem; color: var(--muted); max-width: 48rem;">
+<Base title="Home" description={tagline}>
+  <section class="hero">
+    <img src="https://brand-atoms.com/dist/brands/atom-family/1.0.0/assets/atom-family-icon.png" alt="atom-family" class="hero-mark" />
+    <h1>{title}</h1>
+    <p class="lede">{tagline}</p>
+  </section>
+
+  <p style="font-size: 1.125rem; max-width: 48rem;">
     The catalog of <strong>profile compositions</strong> — durable, signed declarations that establish a user's working identity in the
     <a href="https://github.com/convergent-systems-co/olympus">Olympus</a> broker. Each profile composes role-packs (vocabulary), a policy stack (rules),
     a governance stack (signing/audit), defaults (persona, theme, budget), availability sets (identities, channels),
@@ -17,15 +24,15 @@ const profiles = catalog.compositions;
   <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; padding: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem;">
     <div>
       <div style="font-size: 2rem; font-weight: 600; line-height: 1;">{profiles.length}</div>
-      <div style="color: var(--muted); font-size: 0.875rem;">illustrative profiles</div>
+      <div style="font-size: 0.875rem;">illustrative profiles</div>
     </div>
     <div>
       <div style="font-size: 2rem; font-weight: 600; line-height: 1;">v{catalog.version}</div>
-      <div style="color: var(--muted); font-size: 0.875rem;">catalog version</div>
+      <div style="font-size: 0.875rem;">catalog version</div>
     </div>
     <div>
       <div style="font-size: 2rem; font-weight: 600; line-height: 1;">v1.0.0</div>
-      <div style="color: var(--muted); font-size: 0.875rem;"><a href="/design/">design</a></div>
+      <div style="font-size: 0.875rem;"><a href="/design/">design</a></div>
     </div>
   </section>
 
