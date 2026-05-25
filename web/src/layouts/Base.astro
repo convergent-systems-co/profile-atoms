@@ -11,43 +11,46 @@ const siteDesc = description ?? "User/agent profile compositions — durable wor
     <title>{siteTitle}</title>
     <meta name="description" content={siteDesc} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href="https://brand-atoms.com/dist/brands/atom-family/1.0.0/assets/favicon.svg" />
+    <link rel="preconnect" href="https://brand-atoms.com" />
+    <link rel="stylesheet" href="https://brand-atoms.com/dist/brands/atom-family/1.0.0/css/tokens.css" />
+    <link rel="stylesheet" href="https://brand-atoms.com/dist/brands/atom-family/1.0.0/ui/atoms-catalog.css" />
     <style is:global>
-      :root { --fg: #1a1a1a; --bg: #fafafa; --accent: #4a3a7f; --muted: #666; --card: #fff; --border: #e0e0e0; --kbd: #f0f0f0; }
-      * { box-sizing: border-box; }
-      body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.5; }
-      a { color: var(--accent); }
-      header { border-bottom: 1px solid var(--border); background: var(--card); }
-      header nav { max-width: 72rem; margin: 0 auto; padding: 1rem; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-      header nav strong { font-size: 1.125rem; }
-      header nav a { text-decoration: none; color: var(--muted); }
-      main { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem; }
-      footer { border-top: 1px solid var(--border); padding: 2rem 1rem; text-align: center; color: var(--muted); font-size: 0.875rem; }
-      code { background: var(--kbd); padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.9em; }
-      pre { background: var(--kbd); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+      body { min-height: 100vh; }
+      .hero-mark { width: 160px; height: 160px; margin-bottom: 20px; object-fit: contain; }
+      .sidenav-wordmark { width: 140px; object-fit: contain; display: block; }
+      code { background: var(--kbd, #f0f0f0); padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.9em; }
+      pre { background: var(--kbd, #f0f0f0); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
       h1, h2, h3 { line-height: 1.2; }
       .markdown h1, .markdown h2, .markdown h3 { margin-top: 2rem; }
       .markdown blockquote { border-left: 3px solid var(--accent); padding-left: 1rem; margin-left: 0; color: var(--muted); }
       .markdown table { border-collapse: collapse; margin: 1rem 0; }
       .markdown th, .markdown td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
-      .markdown th { background: var(--kbd); }
+      .markdown th { background: var(--kbd, #f0f0f0); }
     </style>
   </head>
   <body>
-    <header>
-      <nav>
-        <strong><a href="/">PROFILE-Atoms</a></strong>
-        <a href="/profiles/">Profiles</a>
-        <a href="/design/">Design</a>
-        <a href="/how-to-use/">How to use</a>
-        <a href="https://github.com/convergent-systems-co/profile-atoms">GitHub</a>
-        <a href="https://atoms.convergent-systems.com">atoms directory</a>
+    <div class="shell">
+      <main class="content">
+        <slot />
+        <footer>
+          Part of the <a href="https://github.com/convergent-systems-co/atoms">atoms ecosystem</a>. Apache-2.0.
+        </footer>
+      </main>
+      <nav class="sidenav">
+        <a class="brand" href="/">
+          <img src="https://brand-atoms.com/dist/brands/atom-family/1.0.0/assets/atom-family-wordmark.png" alt="ATOMS" class="sidenav-wordmark" />
+        </a>
+        <div class="aside-nav">
+          <a href="/profiles/">Profiles</a>
+          <a href="/design/">Design</a>
+          <a href="/how-to-use/">How to use</a>
+        </div>
+        <div class="aside-meta">
+          <a class="meta-link" href="https://github.com/convergent-systems-co/profile-atoms">github ↗</a>
+          <a class="meta-link" href="https://atoms.convergent-systems.com">atoms directory ↗</a>
+        </div>
       </nav>
-    </header>
-    <main>
-      <slot />
-    </main>
-    <footer>
-      Apache-2.0 · <a href="https://xdao.co">xdao.co</a>
-    </footer>
+    </div>
   </body>
 </html>
