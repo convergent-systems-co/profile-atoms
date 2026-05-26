@@ -11,15 +11,15 @@
     "deploy": "wrangler pages deploy dist --project-name profile-atoms"
   },
   "dependencies": {
-    "@astrojs/react": "^4.1.6",
+    "@astrojs/react": "^5.0.5",
     "astro": "^6.1.10",
-    "marked": "^14.1.0",
+    "marked": "^18.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
-    "wrangler": "^4.0.0"
+    "wrangler": "^4.94.0"
   }
 }
