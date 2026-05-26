@@ -1,9 +1,77 @@
 {
   "catalog": "profile-atoms",
   "version": "0.1.0",
-  "built_at": "2026-05-22T01:39:22+00:00",
+  "built_at": "2026-05-26T00:00:00+00:00",
   "atoms": [],
   "compositions": [
+    {
+      "schema": "https://profile-atoms.com/schemas/profile-atom-v1.json",
+      "canonical_name": "convergent-systems/profiles/ai-engineer",
+      "version": "1.0.0",
+      "authored_by": "convergent-systems-key",
+      "description": "Convergent Systems AI engineer working on the Olympus platform and the atoms catalog federation. Combines senior TypeScript/Python engineering with AI-system design, schema authoring, Cloudflare infrastructure, and the Conventional Commits + TDD discipline enforced by the governance constitution. References are placeholders until referenced catalogs are populated.",
+      "role_packs": [
+        { "ref": "convergent-systems/role-packs/clean-code",            "version": "2.1.0", "priority": 1 },
+        { "ref": "convergent-systems/role-packs/typescript-senior",     "version": "1.0.0", "priority": 2 },
+        { "ref": "convergent-systems/role-packs/ai-system-design",      "version": "1.0.0", "priority": 3 },
+        { "ref": "convergent-systems/role-packs/tdd-test-writer",       "version": "2.0.0", "priority": 4 },
+        { "ref": "convergent-systems/role-packs/documentation",         "version": "1.4.0", "priority": 5 }
+      ],
+      "policy_stack": [
+        { "ref": "convergent-systems/policies/conventional-commits",    "version": "1.0.0" },
+        { "ref": "convergent-systems/policies/secret-handling",         "version": "1.0.0" },
+        { "ref": "convergent-systems/policies/dependency-vetting",      "version": "1.0.0" },
+        { "ref": "olympus/policies/no-curl-pipe-sh",                    "version": "1.0.0" },
+        { "ref": "convergent-systems/policies/delivery-cycle",          "version": "1.0.0" }
+      ],
+      "governance_stack": [
+        { "ref": "convergent-systems/governance/engineering-constitution", "version": "1.0.0" },
+        { "ref": "convergent-systems/governance/atoms-stewardship",        "version": "1.0.0" }
+      ],
+      "default_persona": { "ref": "convergent-systems/personas/peer-programmer", "version": "2.0.0" },
+      "default_theme":   { "ref": "convergent-systems/themes/engineer-dark",     "version": "1.0.0" },
+      "default_budget": {
+        "per_action":  1.0,
+        "per_session": 50,
+        "per_day":     200,
+        "on_cap_hit":  "warn"
+      },
+      "available_identities": [
+        { "ref": "convergent-systems/identities/github-convergent-systems", "version": "1.0.0" },
+        { "ref": "convergent-systems/identities/cloudflare-operator",       "version": "1.0.0" }
+      ],
+      "available_channels": [
+        { "ref": "convergent-systems/channels/anthropic-api",          "version": "1.0.0" },
+        { "ref": "convergent-systems/channels/github-api",             "version": "1.0.0" },
+        { "ref": "convergent-systems/channels/cloudflare-pages-api",   "version": "1.0.0" },
+        { "ref": "olympus/channels/ollama-local",                      "version": "1.0.0" },
+        { "ref": "olympus/channels/git-local",                         "version": "1.0.0" }
+      ],
+      "knowledge_sources": [
+        { "ref": "convergent-systems/knowledge/atoms-spec",            "version": "1.1.0" },
+        { "ref": "convergent-systems/knowledge/olympus-architecture",  "version": "1.0.0" },
+        { "ref": "convergent-systems/knowledge/cloudflare-platform",   "version": "1.0.0" },
+        { "ref": "convergent-systems/knowledge/ai-governance-system",  "version": "1.0.0" }
+      ],
+      "default_workflows": [
+        { "ref": "convergent-systems/workflows/agentic-dispatch",       "version": "1.0.0" },
+        { "ref": "convergent-systems/workflows/tdd-with-review",        "version": "1.0.0" },
+        { "ref": "convergent-systems/workflows/schema-author-validate", "version": "1.0.0" },
+        { "ref": "convergent-systems/workflows/delivery-cycle",         "version": "1.0.0" }
+      ],
+      "update_policy": {
+        "auto_upgrade":       false,
+        "notification":       true,
+        "diff_visualization": "required"
+      },
+      "trust_requirements": {
+        "role_packs":  { "must_be_signed_by_any_of": ["convergent-systems-key", "olympus-official-key"] },
+        "policies":    { "must_be_signed_by_any_of": ["convergent-systems-key", "olympus-official-key"] },
+        "governance":  { "must_be_signed_by": "convergent-systems-key" },
+        "identities":  { "must_be_signed_by": "convergent-systems-key" },
+        "knowledge":   { "must_be_signed_by_any_of": ["convergent-systems-key", "olympus-official-key"] }
+      }
+    },
     {
       "schema": "https://profile-atoms.com/schemas/profile-atom-v1.json",
       "canonical_name": "independent/profiles/non-fiction-author",
